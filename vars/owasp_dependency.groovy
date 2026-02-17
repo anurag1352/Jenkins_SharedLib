@@ -1,7 +1,11 @@
-def call(String nvdKey){
-  dependencyCheck additionalArguments: "--scan ./ --nvdApiKey ${nvdKey} --nvdDelay 15000 --data /var/jenkins_home/dc-data",
-  odcInstallation: 'OWASP'
+def call() {
+    withCredentials([string(credentialsId: 'NVD_API_KEY', variable: 'NVD_KEY')]) {
 
-  dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        dependencyCheck additionalArguments: '--scan ./ --nvdApiKey $NVD_KEY',
+        odcInstallation: 'OWASP'
+
+        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+    }
 }
+
 
